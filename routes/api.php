@@ -11,6 +11,15 @@ use App\Http\Controllers\ProductController;
 Route::post('login', [UserController::class, 'login']);
 Route::post('register', [UserController::class, 'register']);
 
+
+Route::get('oauth/register', function() {
+    return response()->json([
+        'redirect' => 'http://localhost:8000/oauth/redirect'
+    ]);
+});
+
+Route::get('auth/google/callback', [GoogleController::class, 'callback']);
+
 Route::middleware(['admin.api'])->group(function() {
     // Categories -> Hanya diketahui oleh Admin -> Admin Middleware
     Route::post('categories', [CategoryController::class, 'store']);
@@ -26,22 +35,11 @@ Route::middleware(['auth.api'])->group(function() {
     Route::get('products', [ProductController::class, 'show']);
     Route::put('products/{id}', [ProductController::class, 'update']);
     Route::delete('products/{id}', [ProductController::class, 'delete']);
+});
     
-});
-Route::middleware('web')->group(function(){
-    Route::get('/oauth/register',[GoogleController::class,'redirect']);
-    Route::get('/oauth/google/callback',[googleController::class,'callback']);
+// });
+// Route::middleware('web')->group(function(){
+//     Route::get('/oauth/register',[GoogleController::class,'redirect']);
+//     Route::get('/oauth/google/callback',[googleController::class,'callback']);
 
-});
-
-
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/ 
+// });
